@@ -59,7 +59,7 @@ class PaypalIPN
     {
         if ( ! count($_POST))
         {
-            throw new Exception("Missing POST Data");
+            throw new \Exception("Missing POST Data");
         }
 
         $raw_post_data = file_get_contents('php://input');
@@ -103,7 +103,7 @@ class PaypalIPN
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
-        curl_setopt($ch, CURLOPT_SSLVERSION, 4);
+        curl_setopt($ch, CURLOPT_SSLVERSION, 6); //force TLS 1.2
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         if ($this->use_local_certs)
@@ -119,7 +119,7 @@ class PaypalIPN
 
         if ($http_code != 200)
         {
-            throw new Exception("PayPal responded with http code $http_code");
+            throw new \Exception("PayPal responded with http code $http_code");
         }
 
         if ( ! ( $res ))
@@ -127,7 +127,7 @@ class PaypalIPN
             $errno = curl_errno($ch);
             $errstr = curl_error($ch);
             curl_close($ch);
-            throw new Exception("cURL error: [$errno] $errstr");
+            throw new \Exception("cURL error: [$errno] $errstr");
         }
         curl_close($ch);
         if ($res == self::VALID)
